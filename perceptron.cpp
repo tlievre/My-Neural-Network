@@ -1,7 +1,9 @@
 #include <iostream> 
 #include <cstdlib>
+#include <cmath>
+#include <ctime>
 using namespace std;
-#include <time.h>
+
 
 #include "perceptron.hpp"
 
@@ -26,6 +28,26 @@ void Perceptron::print(){
     
 }
 
+float Perceptron::linear_model() {
+    float z = 1; //init with bias value
+    for (int i = 0; i < _nb_weights; i++) z += _weights[i];
+    return z;
+}
+
+float Perceptron::sigmoid(float z) { return 1 / (1 - exp(-z)); }
+
+float Perceptron::log_loss(float y, float a) {
+    // fix the loss function
+    // for    // for (int i = 0; i < _nb_weights; i++) {
+    //     a = y * log(a);   
+    // } (int i = 0; i < _nb_weights; i++) {
+    //     a = y * log(a);   
+    // }
+    return 0;
+}
+
+
 Perceptron::~Perceptron(){
     delete[] _weights;
 }
+ 
