@@ -7,47 +7,49 @@ using namespace std;
 
 #include "perceptron.hpp"
 
-Perceptron::Perceptron(int nb_weights){
-    _nb_weights = nb_weights;
-    _weights = new float[_nb_weights];
+Perceptron::Perceptron(int nb_w){
+    _nb_w = nb_w;
+    _w = new float[_nb_w];
 
     srand(time(0));
 
-    for (int i = 0; i < _nb_weights; i++) {
-        _weights[i] = rand();
+    for (int i = 0; i < _nb_w; i++) {
+        _w[i] = rand() % 100;
     }
 }
 
 void Perceptron::print(){
 
-    cout << "weights : " << "[ ";
-    for (int i = 0; i < _nb_weights; i++) {
-        cout << _weights[i] << " ";
+    cout << "w : " << "[ ";
+    for (int i = 0; i < _nb_w; i++) {
+        cout << _w[i] << " ";
     }
     cout << "]" << endl;
     
 }
 
-float Perceptron::linear_model() {
+float Perceptron::linear_model(float *x) {
+    // x and _w should have the same size
     float z = 1; //init with bias value
-    for (int i = 0; i < _nb_weights; i++) z += _weights[i];
+    for (int i = 0; i < _nb_w; i++) z += _w[i] * x[i];
     return z;
 }
 
-float Perceptron::sigmoid(float z) { return 1 / (1 - exp(-z)); }
+// problem with the dimension of the sigmoid activation function.
+float Perceptron::sigmoid(float z) { return 1. / (1. - exp(-z)); }
 
-float Perceptron::log_loss(float y, float a) {
-    // fix the loss function
-    // for    // for (int i = 0; i < _nb_weights; i++) {
-    //     a = y * log(a);   
-    // } (int i = 0; i < _nb_weights; i++) {
-    //     a = y * log(a);   
-    // }
-    return 0;
+
+float Perceptron::log_loss(float *y, float *a) {
+
+    float sum = 0;
+    //fix the loss functionlog_loss
+    for (int i = 0; i < _nb_w; i++) {
+        sum += y[i] * log(a[i]) + (1. - y[i]) * (log(1. - a[i]));   
+    }
+    return -1 * sum / (float)_nb_w;
 }
 
-
 Perceptron::~Perceptron(){
-    delete[] _weights;
+    delete[] _w;
 }
  
