@@ -13,11 +13,11 @@ int main() {
     p1.print();
     
     float *x = new float[NB_SUBJECTS*NB_FEATURES]; //10 subjects & 10 features
-    for (int i = 0; i < NB_SUBJECTS*NB_FEATURES; i++) { x[i] = rand() % 100; }
+    for (int i = 0; i < NB_SUBJECTS*NB_FEATURES; i++) { x[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX)); }
 
 
     float *y = new float[NB_SUBJECTS];
-    for (int i = 0; i < NB_SUBJECTS; i++) { y[i] = rand() % 100; }
+    for (int i = 0; i < NB_SUBJECTS; i++) { y[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX)); }
 
     //-------------------------FORWARD PROPAGATION ----------------------------
 
@@ -49,6 +49,8 @@ int main() {
     delete[] a;
     delete[] x;
     delete[] y;
+
+    cout << sizeof(float) <<endl;
 
     return 0;
 }

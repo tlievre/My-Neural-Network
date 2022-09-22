@@ -4,7 +4,6 @@
 #include <ctime>
 using namespace std;
 
-
 #include "perceptron.hpp"
 
 Perceptron::Perceptron(int nb_w){
@@ -14,7 +13,7 @@ Perceptron::Perceptron(int nb_w){
     srand(time(0));
 
     for (int i = 0; i < _nb_w; i++) {
-        _w[i] = rand() % 100;
+        _w[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX));
     }
 }
 
@@ -36,7 +35,7 @@ float Perceptron::linear_model(float *x) {
 }
 
 // problem with the dimension of the sigmoid activation function.
-float Perceptron::sigmoid(float z) { return 1. / (1. - exp(-z)); }
+float Perceptron::sigmoid(float z) { return 0.5 * (1. + tanh( 0.5 * z)); }
 
 
 float Perceptron::log_loss(float *y, float *a) {
@@ -44,7 +43,8 @@ float Perceptron::log_loss(float *y, float *a) {
     float sum = 0;
     //fix the loss functionlog_loss
     for (int i = 0; i < _nb_w; i++) {
-        sum += y[i] * log(a[i]) + (1. - y[i]) * (log(1. - a[i]));   
+        sum += y[i] * log(a[i]) + (1. - y[i]) * (log(1. - a[i]));
+        
     }
     return -1 * sum / (float)_nb_w;
 }
