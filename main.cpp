@@ -6,51 +6,84 @@ using namespace std;
 
 # define NB_SUBJECTS 10 //subject
 # define NB_FEATURES 10 //features
+# define EPOCHS 10
+
+# define TEST 1
+
+void test_tab(float *x, int size = 10) {
+    for (int i = 0; i < size; i++) x[i] += 1;
+}
 
 int main() {
 
+# if TEST == 1
     Perceptron p1(10);
-    p1.print();
+    p1.print_weights();
     
     float *x = new float[NB_SUBJECTS*NB_FEATURES]; //10 subjects & 10 features
-    for (int i = 0; i < NB_SUBJECTS*NB_FEATURES; i++) { x[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX)); }
+
+    for (int i = 0; i < NB_SUBJECTS*NB_FEATURES; i++) {
+        x[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX));
+    }
 
 
     float *y = new float[NB_SUBJECTS];
-    for (int i = 0; i < NB_SUBJECTS; i++) { y[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX)); }
-
-    //-------------------------FORWARD PROPAGATION ----------------------------
+    for (int i = 0; i < NB_SUBJECTS; i++) {
+        y[i] = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX));
+    }
 
     float *z = new float[NB_SUBJECTS]; //linear function
     float *a = new float[NB_SUBJECTS]; //activation function
+    float ll;
     
+    
+//-------------------------LEARNING PHASE -------------------------------------
+    for (int epoch = 0; epoch < EPOCHS; epoch++) {
 
-    // compute the sigmoid activation function
-    for (int i = 0; i < NB_SUBJECTS; i++) {
-        z[i] = p1.linear_model(x + (i * NB_SUBJECTS));
-        a[i] = p1.sigmoid(z[i]);
+
+//-------------------------FORWARD PROPAGATION --------------------------------
+        p1.forward_propagation(x, z, a, NB_SUBJECTS);
+    
+        // loss functions
+        ll = p1.log_loss(y, a, NB_SUBJECTS);
+
+        // forward monitoring
+        cout << "EPOCH " << epoch << " FORWARD" << endl;
+        p1.print_weights();
+        display("z", z, NB_SUBJECTS);
+        display("a", a, NB_SUBJECTS);
+        cout << "l : " << ll << endl;
+
+//-------------------------BACKWARD PROPAGATION --------------------------------
+        p1.back_propagation(0.05, y, a, NB_SUBJECTS);
+
+        // forward monitoring
+        cout << "EPOCH " << epoch << " BACKWARD" << endl;
+        p1.print_weights();
+        cout << endl;
     }
-    
-    // loss functions
-    float ll = p1.log_loss(y, a);
-
-    // monitoring
-    cout << "z : [";
-    for(int i = 0; i < NB_SUBJECTS; i++) { cout << z[i] << " ";}
-    cout << "]"<< endl;
-
-    cout << "a : [";
-    for(int i = 0; i < NB_SUBJECTS; i++) { cout << a[i] << " ";}
-    cout << "]"<< endl;
-
-    cout << "l : " << ll << endl;
 
     delete[] z;
     delete[] a;
     delete[] x;
     delete[] y;
 
-    cout << sizeof(float) <<endl;
+# else
+
+    float *x = new float[10];
+
+    for (int i = 0; i < 10; i++) cout << x[i];
+    cout << endl;
+
+    for(int i = 0; i < 20; i++) {
+        test_tab(x);
+        for (int j = 0; j < 10; j++) cout << x[j];
+        cout << endl;
+    }
+
+    delete[] x;
+
+#endif
 
     return 0;
 }
