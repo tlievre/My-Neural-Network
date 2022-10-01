@@ -6,9 +6,7 @@ using namespace std;
 
 # define NB_SUBJECTS 10 //subject
 # define NB_FEATURES 10 //features
-# define EPOCHS 10
-
-# define TEST 1
+# define EPOCHS 100
 
 void test_tab(float *x, int size = 10) {
     for (int i = 0; i < size; i++) x[i] += 1;
@@ -16,7 +14,6 @@ void test_tab(float *x, int size = 10) {
 
 int main() {
 
-# if TEST == 1
     Perceptron p1(10);
     p1.print_weights();
     
@@ -67,23 +64,6 @@ int main() {
     delete[] a;
     delete[] x;
     delete[] y;
-
-# else
-
-    float *x = new float[10];
-
-    for (int i = 0; i < 10; i++) cout << x[i];
-    cout << endl;
-
-    for(int i = 0; i < 20; i++) {
-        test_tab(x);
-        for (int j = 0; j < 10; j++) cout << x[j];
-        cout << endl;
-    }
-
-    delete[] x;
-
-#endif
 
     return 0;
 }
